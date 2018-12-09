@@ -4,7 +4,8 @@
   "description": "A GraphQL API in Node JS",
   "main": "server.js",
   "scripts": {
-    "test": "npm run test"
+    "test": "npm run test",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
