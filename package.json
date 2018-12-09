@@ -1,0 +1,24 @@
+{
+  "name": "graphql",
+  "version": "0.0.1-alpha-1",
+  "description": "A GraphQL API in Node JS",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtotodev05/GraphqlApi.git"
+  },
+  "keywords": [
+    "node",
+    "graphql",
+    "api"
+  ],
+  "author": "Kamau Brian",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mtotodev05/GraphqlApi/issues"
+  },
+  "homepage": "https://github.com/mtotodev05/GraphqlApi#readme"
+}
