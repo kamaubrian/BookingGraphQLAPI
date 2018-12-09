@@ -1,5 +1,5 @@
 {
-  "name": "graphql",
+  "name": "graphqlnode",
   "version": "0.0.1-alpha-1",
   "description": "A GraphQL API in Node JS",
   "main": "server.js",
@@ -13,7 +13,7 @@
   },
   "keywords": [
     "node",
-    "graphql",
+    "graphql-node",
     "api"
   ],
   "author": "Kamau Brian",
@@ -26,6 +26,8 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "graphql": "^14.0.2",
     "mongoose": "^5.3.15",
     "morgan": "^1.9.1"
   },
