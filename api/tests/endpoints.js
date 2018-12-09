@@ -11,6 +11,6 @@ describe('/Testing Base Endpoint',()=>{
            .expect(200)
            .expect(res=>{
                assert(res.status,200);
-           })
+           });
     });
 });

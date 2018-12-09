@@ -30,6 +30,11 @@
     "morgan": "^1.9.1"
   },
   "devDependencies": {
-    "nodemon": "^1.18.7"
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "expect": "^23.6.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.7",
+    "supertest": "^3.3.0"
   }
 }
