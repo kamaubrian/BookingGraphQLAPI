@@ -7,6 +7,7 @@ const routes = require('./api/routes/index');
 const graphQlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
 
+const events  = [];
 
 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -23,6 +24,13 @@ app.use('/graphql',graphQlHttp({
             description: String!
             price: Float!
             date: String!
+        }
+        
+        input EventInput {
+            title: String!
+            description: String!
+            price: Float!
+            date: String!
         
         }
         
@@ -31,7 +39,7 @@ app.use('/graphql',graphQlHttp({
         }
         
         type RootMutation {
-            createEvent(title: String!,description: String!,price: Float!,date: String!): Event 
+            createEvent(eventInput: EventInput): Event 
         }
     
         schema {
@@ -41,13 +49,17 @@ app.use('/graphql',graphQlHttp({
     `),
     rootValue:{
         events: ()=>{
-            return [
-                'Romantic' ,'Writing Code' ,'Sailing' , 'Code is Fun'
-            ];
+         return events;
         },
         createEvent: (args)=>{
-            const eventName = args.name;
-            return eventName;
+            const event = {
+              _id: Math.random().toString(),
+              title:args.title,
+              description:args.description,
+              price:+args.price,
+              date:new Date().toISOString()
+            };
+            events.push(event);
         }
     },
     graphiql:true
