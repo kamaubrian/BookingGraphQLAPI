@@ -27,11 +27,11 @@ app.use('/graphql',graphQlHttp({
         }
         
         type RootQuery {
-            events: [String!]!
+            events: [Event!]!
         }
         
         type RootMutation {
-            createEvent(name: String): String 
+            createEvent(title: String!,description: String!,price: Float!,date: String!): Event 
         }
     
         schema {
