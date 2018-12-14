@@ -6,8 +6,10 @@ const bodyParser = require('body-parser');
 const routes = require('./api/routes/index');
 const graphQlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
-
+require('dotenv').config();
 const events  = [];
+
+
 
 
 app.use(bodyParser.urlencoded({extended:false}));
