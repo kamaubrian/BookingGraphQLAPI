@@ -66,7 +66,7 @@ app.use('/graphql',graphQlHttp({
                  return events.map(event=>{
                      return {
                          ...event._doc,
-                        _id:event._doc._id.toString()
+                        _id:event.id
                      }
                  })
              })
@@ -87,7 +87,7 @@ app.use('/graphql',graphQlHttp({
                 .then(result=>{
                     console.log(result);
                     return {...result._doc,
-                        _id:event._doc._id.toString()
+                        _id:result.id
                     };
                 })
                 .catch(err=>{
