@@ -9,6 +9,7 @@ const { buildSchema } = require('graphql');
 require('dotenv').config();
 const events  = [];
 const mongoose = require('mongoose');
+const Event = require('./api/model/event');
 
 mongoose.connect("mongodb+srv://"+process.env.MONGO_ATLAS_USER+":"+process.env.MONGO_ATLAS+"@restapi-kvyex.mongodb.net/"+process.env.MONGO_ATLAS_DATABASE+"?retryWrites=true",
     {useNewUrlParser:true},function(err){
@@ -60,18 +61,37 @@ app.use('/graphql',graphQlHttp({
     `),
     rootValue:{
         events: ()=>{
-         return events;
+         return Event.find()
+             .then(events=>{
+                 return events.map(event=>{
+                     return {
+                         ...event._doc,
+                        _id:event._doc._id.toString()
+                     }
+                 })
+             })
+             .catch(err=>{
+                 console.log(err.message);
+                 throw err;
+             })
         },
         createEvent: (args)=>{
-            const event = {
-              _id: Math.random().toString(),
-              title:args.eventInput.title,
-              description:args.eventInput.description,
-              price:+args.eventInput.price,
-              date:args.eventInput.date
-            };
-            events.push(event);
-            return event;
+           const event = new Event({
+              _id:new mongoose.Types.ObjectId(),
+               title:args.eventInput.title,
+               description:args.eventInput.description,
+               price:+args.eventInput.price,
+               date:new Date(args.eventInput.date)
+           });
+            return event.save()
+                .then(result=>{
+                    console.log(result);
+                    return {...result._doc};
+                })
+                .catch(err=>{
+                    console.log(err);
+                    throw err;
+                })
         }
     },
     graphiql:true

@@ -8,4 +8,4 @@ const eventSchema = mongoose.Schema({
     date:{type:Date,required:true}
 });
 
-module.exports = mongoose.model('Events',eventSchema);
+module.exports = mongoose.model('Event',eventSchema);
