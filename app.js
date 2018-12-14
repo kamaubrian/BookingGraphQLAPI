@@ -8,8 +8,17 @@ const graphQlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
 require('dotenv').config();
 const events  = [];
+const mongoose = require('mongoose');
 
+mongoose.connect("mongodb+srv://"+process.env.MONGO_ATLAS_USER+":"+process.env.MONGO_ATLAS+"@restapi-kvyex.mongodb.net/"+process.env.MONGO_ATLAS_DATABASE+"?retryWrites=true",
+    {useNewUrlParser:true},function(err){
+        if(!err){
+            console.log('Successful Connection to MongoDB');
 
+        }else{
+            console.log('Error Loading Connection',err.message);
+        }
+    });
 
 
 app.use(bodyParser.urlencoded({extended:false}));
