@@ -11,6 +11,7 @@ const events  = [];
 const mongoose = require('mongoose');
 const Event = require('./api/model/event');
 const User = require('./api/model/user');
+const bcyrpt = require('bcryptjs');
 
 mongoose.connect("mongodb+srv://"+process.env.MONGO_ATLAS_USER+":"+process.env.MONGO_ATLAS+"@restapi-kvyex.mongodb.net/"+process.env.MONGO_ATLAS_DATABASE+"?retryWrites=true",
     {useNewUrlParser:true},function(err){
@@ -109,10 +110,18 @@ app.use('/graphql',graphQlHttp({
                 })
         },
         createUser: (args)=>{
-            const user = new User({
-               email: args.userInput.email,
-               password: args.userInput.password
-            });
+            bcyrpt.hash(args.userInput.password,12)
+                .then(hashedPassword=>{
+                    const user = new User({
+                        email: args.userInput.email,
+                        password: hashedPassword
+                    })
+                })
+                .catch(err=>{
+                    console.log(err.message);
+                    throw err;
+
+                });
         }
     },
     graphiql:true
