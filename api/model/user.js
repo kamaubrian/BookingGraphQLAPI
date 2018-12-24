@@ -5,7 +5,7 @@ const userSchema = mongoose.Schema({
     password:{type:String,required:true},
     createdEvents:[
         {
-            type:Schema.Types.ObjectId,
+            type:mongoose.Schema.Types.ObjectId,
             ref:'Event'
         }
     ]

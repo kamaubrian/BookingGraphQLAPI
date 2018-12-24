@@ -116,13 +116,17 @@ app.use('/graphql',graphQlHttp({
                         email: args.userInput.email,
                         password: hashedPassword
                     });
-                    return user.save();
+                    return user.save()
+                        .then(result=>{
+                            return{
+                                ...result._doc,_id:result.id
+                            }
+                        })
+                        .catch(err=>{
+                            console.log(err.message);
+                            throw err;
+                        });
                 })
-               .then(result=>{
-                   return{
-                       ...result._doc,_id:result.id
-                   }
-               })
                 .catch(err=>{
                     console.log(err.message);
                     throw err;

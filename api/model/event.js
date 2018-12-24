@@ -7,7 +7,7 @@ const eventSchema = mongoose.Schema({
     price:{type:Number,required:true},
     date:{type:Date,required:true},
     creator:{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
 });
