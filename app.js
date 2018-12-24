@@ -110,13 +110,19 @@ app.use('/graphql',graphQlHttp({
                 })
         },
         createUser: (args)=>{
-            bcyrpt.hash(args.userInput.password,12)
+           return bcyrpt.hash(args.userInput.password,12)
                 .then(hashedPassword=>{
                     const user = new User({
                         email: args.userInput.email,
                         password: hashedPassword
-                    })
+                    });
+                    return user.save();
                 })
+               .then(result=>{
+                   return{
+                       ...result._doc,_id:result.id
+                   }
+               })
                 .catch(err=>{
                     console.log(err.message);
                     throw err;
