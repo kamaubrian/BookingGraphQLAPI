@@ -95,14 +95,32 @@ app.use('/graphql',graphQlHttp({
                title:args.eventInput.title,
                description:args.eventInput.description,
                price:+args.eventInput.price,
-               date:new Date(args.eventInput.date)
+               date:new Date(args.eventInput.date),
+               creator:'5c20be57305ea72cf841b022'
            });
+           let createdEvent;
             return event.save()
                 .then(result=>{
-                    console.log(result);
-                    return {...result._doc,
+                    createdEvent ={...result._doc,
                         _id:result.id
                     };
+                    return User.findById('5c20be57305ea72cf841b022')
+                        .then(user=>{
+                            if(!user){
+                                throw new Error('User Not Found')
+                            }
+                            user.createdEvents.push(event);
+                            return user.save()
+                                .then(result=>{
+                                    return createdEvent;
+                                })
+                                .catch(err=>{
+                                    throw err;
+                                });
+                        })
+                        .catch(err=>{
+                            throw err;
+                        })
                 })
                 .catch(err=>{
                     console.log(err);
