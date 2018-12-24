@@ -50,7 +50,11 @@ app.use('/graphql',graphQlHttp({
             description: String!
             price: Float!
             date: String!
+        }
         
+        input UserInput {
+            email: String!
+            password: String!
         }
         
         type RootQuery {
