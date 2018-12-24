@@ -10,6 +10,7 @@ require('dotenv').config();
 const events  = [];
 const mongoose = require('mongoose');
 const Event = require('./api/model/event');
+const User = require('./api/model/user');
 
 mongoose.connect("mongodb+srv://"+process.env.MONGO_ATLAS_USER+":"+process.env.MONGO_ATLAS+"@restapi-kvyex.mongodb.net/"+process.env.MONGO_ATLAS_DATABASE+"?retryWrites=true",
     {useNewUrlParser:true},function(err){
@@ -63,6 +64,7 @@ app.use('/graphql',graphQlHttp({
         
         type RootMutation {
             createEvent(eventInput: EventInput): Event 
+            createUser(userInput: UserInput): User
         }
     
         schema {
@@ -105,6 +107,12 @@ app.use('/graphql',graphQlHttp({
                     console.log(err);
                     throw err;
                 })
+        },
+        createUser: (args)=>{
+            const user = new User({
+               email: args.userInput.email,
+               password: args.userInput.password
+            });
         }
     },
     graphiql:true
