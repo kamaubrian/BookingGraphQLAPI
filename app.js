@@ -17,19 +17,16 @@ mongoose.connect("mongodb+srv://"+process.env.MONGO_ATLAS_USER+":"+process.env.M
     {useNewUrlParser:true},function(err){
         if(!err){
             console.log('Successful Connection to MongoDB');
-
         }else{
             console.log('Error Loading Connection',err.message);
         }
     });
-
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(cors());
 app.use('/',routes);
-
 app.use('/graphql',graphQlHttp({
     schema:buildSchema(`
         type Event {
@@ -38,15 +35,17 @@ app.use('/graphql',graphQlHttp({
             description: String!
             price: Float!
             date: String!
+            creator: User!
+
         }
         
         type User {
             _id: ID!
             email: String!
             password: String
+            createdEvents: [Event!]
         }
-       
-        
+     
         input EventInput {
             title: String!
             description: String!
@@ -75,7 +74,7 @@ app.use('/graphql',graphQlHttp({
     `),
     rootValue:{
         events: ()=>{
-         return Event.find()
+         return Event.find().populate()
              .then(events=>{
                  return events.map(event=>{
                      return {
@@ -134,7 +133,7 @@ app.use('/graphql',graphQlHttp({
                         throw new Error('User Already Exists')
                     }else{
                         return bcyrpt.hash(args.userInput.password,12)
-                            .then(hashedPassword=>{
+                            .then(hashedPassword => {
                                 const user = new User({
                                     email: args.userInput.email,
                                     password: hashedPassword
@@ -167,9 +166,10 @@ app.use('/graphql',graphQlHttp({
     },
     graphiql:true
 }));
+
 app.use('/favicon.ico',()=>{
     console.log("Error")
-})
+});
 
 app.use(function(req,res,next){
    const error = new Error('Route Not Found');
