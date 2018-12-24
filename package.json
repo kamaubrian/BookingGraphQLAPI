@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/mtotodev05/GraphqlApi#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
