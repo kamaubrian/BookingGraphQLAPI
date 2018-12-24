@@ -74,7 +74,7 @@ app.use('/graphql',graphQlHttp({
     `),
     rootValue:{
         events: ()=>{
-         return Event.find().populate()
+         return Event.find().populate('creator')
              .then(events=>{
                  return events.map(event=>{
                      return {
