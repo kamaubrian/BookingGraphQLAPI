@@ -79,7 +79,11 @@ app.use('/graphql',graphQlHttp({
                  return events.map(event=>{
                      return {
                          ...event._doc,
-                        _id:event.id
+                        _id:event.id,
+                         creator:{
+                             ...event._doc.creator._doc,
+                             _id: event._doc.creator.id
+                         }
                      }
                  })
              })
