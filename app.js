@@ -95,10 +95,7 @@ app.use('/graphql',graphQlHttp({
                      return {
                          ...event._doc,
                         _id:event.id,
-                         creator:{
-                             ...event._doc.creator._doc,
-                             _id: event._doc.creator.id
-                         }
+                         creator:user.bind(this,event._doc.creator)
                      }
                  })
              })
