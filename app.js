@@ -29,6 +29,20 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use('/',routes);
 
+
+const eventHandler = eventIds =>{
+    return Event.find({_id: {$in:eventIds}})
+        .then(events=>{
+            return events.map(singleEvent =>{
+
+            })
+        })
+        .catch(err=>{
+           console.log(err.message);
+           throw err;
+        });
+};
+
 const user = userId =>{
     return User.findById(userId)
         .then(user=>{
