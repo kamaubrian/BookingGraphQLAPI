@@ -34,7 +34,11 @@ const eventHandler = eventIds =>{
     return Event.find({_id: {$in:eventIds}})
         .then(events=>{
             return events.map(singleEvent =>{
-
+                return {
+                   ...singleEvent._doc,
+                   _id: singleEvent.id,
+                   creator:user.bind(this, singleEvent.creator)
+                }
             })
         })
         .catch(err=>{
@@ -47,7 +51,9 @@ const user = userId =>{
     return User.findById(userId)
         .then(user=>{
            return {
-               ...user._doc,_id:user.id
+               ...user._doc,
+               _id:user.id,
+               createdEvents: eventHandler.bind(this,user._doc.createdEvents)
            }
         })
         .catch(err=>{
@@ -131,7 +137,8 @@ app.use('/graphql',graphQlHttp({
             return event.save()
                 .then(result=>{
                     createdEvent ={...result._doc,
-                        _id:result.id
+                        _id:result.id,
+                        creator:user.bind(this, result._doc.creator)
                     };
                     return User.findById('5c20be57305ea72cf841b022')
                         .then(user=>{
