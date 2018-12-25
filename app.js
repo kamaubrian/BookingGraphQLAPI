@@ -13,6 +13,7 @@ const Event = require('./api/model/event');
 const User = require('./api/model/user');
 const bcyrpt = require('bcryptjs');
 
+
 mongoose.connect("mongodb+srv://"+process.env.MONGO_ATLAS_USER+":"+process.env.MONGO_ATLAS+"@restapi-kvyex.mongodb.net/"+process.env.MONGO_ATLAS_DATABASE+"?retryWrites=true",
     {useNewUrlParser:true},function(err){
         if(!err){
@@ -27,6 +28,20 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(cors());
 app.use('/',routes);
+
+const user = userId =>{
+    return User.findById(userId)
+        .then(user=>{
+           return {
+               ...user._doc,_id:user.id
+           }
+        })
+        .catch(err=>{
+            console.log(err.message);
+            throw err;
+        })
+};
+
 app.use('/graphql',graphQlHttp({
     schema:buildSchema(`
         type Event {
