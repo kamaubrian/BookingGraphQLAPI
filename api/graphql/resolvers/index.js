@@ -191,7 +191,14 @@ module.exports = {
     },
     cancelBooking: async(args)=>{
         try{
-
+            const bookedEvent = await Booking.findById(args.bookingId).populate('event');
+            const event ={
+                ...bookedEvent.event._doc,
+                _id:bookedEvent.event.id,
+                creator: user.bind(this,bookedEvent.event._doc.creator)
+            };
+            await Booking.deleteOne({_id:args.bookingId})
+            return event;
         }catch (e) {
             console.log(e.message);
             throw e;
