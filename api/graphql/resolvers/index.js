@@ -188,5 +188,14 @@ module.exports = {
             console.log(e.message);
             throw e;
         }
+    },
+    cancelBooking: async(args)=>{
+        try{
+
+        }catch (e) {
+            console.log(e.message);
+            throw e;
+        }
     }
+
 };
