@@ -22,6 +22,22 @@ const eventHandler = eventIds =>{
         });
 };
 
+const singleEventHandler = async (eventId)=>{
+    try{
+        const fetchedEvent = await Event.findById(eventId);
+        console.log(fetchedEvent);
+        return{
+            ...fetchedEvent._doc,
+            _id: fetchedEvent.id,
+            creator: user.bind(this, fetchedEvent._doc.creator)
+        }
+    }catch (e) {
+        console.log('Error Fetching single Event',e.message);
+        throw e;
+    }
+};
+
+
 const user = userId =>{
     return User.findById(userId)
         .then(user=>{
@@ -58,10 +74,13 @@ module.exports = {
     bookings: async ()=>{
       try{
         const bookings = await Booking.find();
-        return bookings.map(booking=>{
+        console.log(bookings);
+        return bookings.map( async booking => {
             return {
                 ...booking._doc,
-                _id:booking.id,
+                _id: booking.id,
+                user: user.bind(this, booking._doc.user),
+                event: await singleEventHandler.bind(this, booking._doc.event),
                 createdAt: new Date(booking._doc.createdAt).toISOString(),
                 updatedAt: new Date(booking._doc.updatedAt).toISOString()
             }
@@ -151,7 +170,7 @@ module.exports = {
     },
     bookEvent: async(args)=>{
         try{
-            const fetchedEvent = await Event.findOne({id: args.eventId});
+            const fetchedEvent = await Event.findOne({_id: args.eventId});
             const singleBooking = new Booking({
                 user:'5c20be57305ea72cf841b022',
                 event:fetchedEvent
@@ -159,7 +178,11 @@ module.exports = {
             const result = await singleBooking.save();
             return {
                 ...result._doc,
-                _id: result.id
+                _id: result.id,
+                user: user.bind(this, result._doc.user),
+                event: await singleEventHandler(result._doc.event._id),
+                createdAt: new Date(result._doc.createdAt).toISOString(),
+                updatedAt: new Date(result._doc.updatedAt).toISOString()
             }
         }catch (e) {
             console.log(e.message);
