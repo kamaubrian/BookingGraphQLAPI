@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Event = require('../../../api/model/event');
 const User = require('../../../api/model/user');
 const bcyrpt = require('bcryptjs');
+const Booking = require('../../../api/model/booking');
 
 const eventHandler = eventIds =>{
     return Event.find({_id: {$in:eventIds}})
@@ -53,6 +54,22 @@ module.exports = {
                 console.log(err.message);
                 throw err;
             })
+    },
+    bookings: async ()=>{
+      try{
+        const bookings = await Booking.find();
+        return bookings.map(booking=>{
+            return {
+                ...booking._doc,
+                _id:booking.id,
+                createdAt: new Date(booking._doc.createdAt).toISOString(),
+                updatedAt: new Date(booking._doc.updatedAt).toISOString()
+            }
+        })
+      }catch (e) {
+          console.log(e.message);
+          throw e;
+      }
     },
     createEvent: (args)=>{
         const event = new Event({
@@ -131,5 +148,22 @@ module.exports = {
                 throw err;
             })
 
+    },
+    bookEvent: async(args)=>{
+        try{
+            const fetchedEvent = await Event.findOne({id: args.eventId});
+            const singleBooking = new Booking({
+                user:'5c20be57305ea72cf841b022',
+                event:fetchedEvent
+            });
+            const result = await singleBooking.save();
+            return {
+                ...result._doc,
+                _id: result.id
+            }
+        }catch (e) {
+            console.log(e.message);
+            throw e;
+        }
     }
 };
