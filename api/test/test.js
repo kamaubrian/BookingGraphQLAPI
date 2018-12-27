@@ -2,9 +2,10 @@ let request = require('supertest');
 let assert = require('chai').assert;
 const server = require('../../server');
 const chai = require('chai');
-const expect = chai.expect;
+const expect = require('expect');
 
 describe('/Testing Query',()=>{
+
     it('it should test event query requests',(done)=>{
        setTimeout(done,1000);
        request(server)
@@ -17,8 +18,23 @@ describe('/Testing Query',()=>{
                }
                res.body.events.should.have.property('description');
                res.body.events.should.have.property('_id');
-               res.body.events.should.have.property('title')
+               res.body.events.should.have.property('title');
+               res.body.events.should.have.lengthOf(5);
+
                done();
            })
     });
+    it('it should fail on Bad Requests',(done)=>{
+        setTimeout(done,1000);
+        request(server)
+            .post('/graphql')
+            .send({query:'{events: {describe id} }'})
+            .expect(400)
+            .end((err,res)=>{
+                if(err){
+                    return done(err);
+                }
+                done();
+            })
+    })
 });
