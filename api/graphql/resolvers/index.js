@@ -69,7 +69,7 @@ module.exports = {
             .catch(err=>{
                 console.log(err.message);
                 throw err;
-            })
+            });
     },
     bookings: async ()=>{
       try{
@@ -124,12 +124,12 @@ module.exports = {
                     })
                     .catch(err=>{
                         throw err;
-                    })
+                    });
             })
             .catch(err=>{
                 console.log(err);
                 throw err;
-            })
+            });
     },
     createUser: (args)=>{
         return User.findOne({email:args.userInput.email})
@@ -204,5 +204,4 @@ module.exports = {
             throw e;
         }
     }
-
 };
