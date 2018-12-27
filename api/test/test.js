@@ -5,7 +5,6 @@ const chai = require('chai');
 const expect = require('expect');
 
 describe('/Testing Query',()=>{
-
     it('it should test event query requests',(done)=>{
        setTimeout(done,1000);
        request(server)
@@ -36,5 +35,6 @@ describe('/Testing Query',()=>{
                 }
                 done();
             })
-    })
+    });
+
 });
