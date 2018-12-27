@@ -1,5 +1,6 @@
 const { buildSchema } = require('graphql');
 
+// language=GraphQL Schema
 module.exports = buildSchema(
     `
         type Booking {
