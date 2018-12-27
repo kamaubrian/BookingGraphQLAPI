@@ -9,6 +9,6 @@ const userSchema = mongoose.Schema({
             ref:'Event'
         }
     ]
-});
+},{timestamps:true});
 
 module.exports = mongoose.model('User', userSchema);

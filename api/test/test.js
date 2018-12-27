@@ -34,7 +34,25 @@ describe('/Testing Query',()=>{
                     return done(err);
                 }
                 done();
-            })
+                //console.log(res.body);
+            });
     });
+    it('it should not create duplicate users',(done)=>{
+       setTimeout(done,1000);
+       request(server)
+           .post('/graphql')
+           .send({query:'{events: {describe id} }'})
+           .expect(400)
+           .end((err,res)=>{
+               if(err){
+                   console.log(err.message);
+                   console.log(res);
+
+                   return done(err);
+               }
+               done();
+           })
+    });
+
 
 });

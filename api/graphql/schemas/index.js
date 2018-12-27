@@ -9,7 +9,6 @@ module.exports = buildSchema(
             user: User!
             createdAt: String!
             updatedAt: String!
-        
         }
     
         type Event {
@@ -19,7 +18,6 @@ module.exports = buildSchema(
             price: Float!
             date: String!
             creator: User!
-
         }
         
         type User {
