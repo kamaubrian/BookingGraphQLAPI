@@ -3,12 +3,13 @@ const Event = require('../../../api/model/event');
 const User = require('../../../api/model/user');
 const bcyrpt = require('bcryptjs');
 const Booking = require('../../../api/model/booking');
+const {dateToString} = require('../helpers/date');
 
 const transformEvent = event => {
     return {
         ...event._doc,
         _id: event.id,
-        date: new Date(event._doc.date).toISOString(),
+        date: dateToString(event._doc.date),
         creator: user.bind(this,event.creator)
     };
 };
@@ -76,8 +77,8 @@ module.exports = {
                 _id: booking.id,
                 user: user.bind(this, booking._doc.user),
                 event: await singleEventHandler.bind(this, booking._doc.event),
-                createdAt: new Date(booking._doc.createdAt).toISOString(),
-                updatedAt: new Date(booking._doc.updatedAt).toISOString()
+                createdAt: dateToString(booking._doc.createdAt),
+                updatedAt: dateToString(booking._doc.updatedAt)
             }
         })
       }catch (e) {
@@ -91,7 +92,7 @@ module.exports = {
             title:args.eventInput.title,
             description:args.eventInput.description,
             price:+args.eventInput.price,
-            date:new Date(args.eventInput.date),
+            date:dateToString(args.eventInput.date),
             creator:'5c20be57305ea72cf841b022'
         });
         let createdEvent;
@@ -171,8 +172,8 @@ module.exports = {
                 _id: result.id,
                 user: user.bind(this, result._doc.user),
                 event: await singleEventHandler(result._doc.event._id),
-                createdAt: new Date(result._doc.createdAt).toISOString(),
-                updatedAt: new Date(result._doc.updatedAt).toISOString()
+                createdAt: dateToString(result._doc.createdAt),
+                updatedAt: dateToString(result._doc.updatedAt)
             }
         }catch (e) {
             console.log(e.message);
@@ -183,7 +184,7 @@ module.exports = {
         try{
             const bookedEvent = await Booking.findById(args.bookingId).populate('event');
             if(bookedEvent == null ){
-                throw new Error("Booking Does not Exist")
+                throw new Error("Booking Does not Exist");
             }
             const event =transformEvent(bookedEvent.event);
             await Booking.deleteOne({_id:args.bookingId});
