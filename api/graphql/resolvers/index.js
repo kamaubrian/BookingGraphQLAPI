@@ -182,6 +182,9 @@ module.exports = {
     cancelBooking: async(args)=>{
         try{
             const bookedEvent = await Booking.findById(args.bookingId).populate('event');
+            if(bookedEvent == null ){
+                throw new Error("Booking Does not Exist")
+            }
             const event =transformEvent(bookedEvent.event);
             await Booking.deleteOne({_id:args.bookingId});
             return event;
