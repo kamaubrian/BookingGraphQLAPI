@@ -97,12 +97,7 @@ module.exports = {
         let createdEvent;
         return event.save()
             .then(result=>{
-                createdEvent ={...result._doc,
-                    _id:result.id,
-                    date:new Date(result._doc.date).toISOString(),
-
-                    creator:user.bind(this, result._doc.creator)
-                };
+                createdEvent =transformEvent(result);
                 return User.findById('5c20be57305ea72cf841b022')
                     .then(user=>{
                         if(!user){
@@ -187,12 +182,8 @@ module.exports = {
     cancelBooking: async(args)=>{
         try{
             const bookedEvent = await Booking.findById(args.bookingId).populate('event');
-            const event ={
-                ...bookedEvent.event._doc,
-                _id:bookedEvent.event.id,
-                creator: user.bind(this,bookedEvent.event._doc.creator)
-            };
-            await Booking.deleteOne({_id:args.bookingId})
+            const event =transformEvent(bookedEvent.event);
+            await Booking.deleteOne({_id:args.bookingId});
             return event;
         }catch (e) {
             console.log(e.message);
