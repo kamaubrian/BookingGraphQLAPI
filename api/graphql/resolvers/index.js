@@ -14,6 +14,17 @@ const transformEvent = event => {
     };
 };
 
+const transformBooking = async booking => {
+    return {
+        ...booking._doc,
+        _id: booking.id,
+        user: user.bind(this, booking._doc.user),
+        event: await singleEventHandler.bind(this, booking._doc.event),
+        createdAt: dateToString(booking._doc.createdAt),
+        updatedAt: dateToString(booking._doc.updatedAt)
+    }
+};
+
 const eventHandler = eventIds =>{
     return Event.find({_id: {$in:eventIds}})
         .then(events=>{
@@ -72,14 +83,7 @@ module.exports = {
         const bookings = await Booking.find();
         console.log(bookings);
         return bookings.map( async booking => {
-            return {
-                ...booking._doc,
-                _id: booking.id,
-                user: user.bind(this, booking._doc.user),
-                event: await singleEventHandler.bind(this, booking._doc.event),
-                createdAt: dateToString(booking._doc.createdAt),
-                updatedAt: dateToString(booking._doc.updatedAt)
-            }
+            return await transformBooking(booking);
         })
       }catch (e) {
           console.log(e.message);
@@ -167,14 +171,7 @@ module.exports = {
                 event:fetchedEvent
             });
             const result = await singleBooking.save();
-            return {
-                ...result._doc,
-                _id: result.id,
-                user: user.bind(this, result._doc.user),
-                event: await singleEventHandler(result._doc.event._id),
-                createdAt: dateToString(result._doc.createdAt),
-                updatedAt: dateToString(result._doc.updatedAt)
-            }
+            return transformBooking(result);
         }catch (e) {
             console.log(e.message);
             throw e;
