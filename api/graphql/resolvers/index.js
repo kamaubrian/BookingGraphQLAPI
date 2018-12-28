@@ -4,17 +4,21 @@ const User = require('../../../api/model/user');
 const bcyrpt = require('bcryptjs');
 const Booking = require('../../../api/model/booking');
 
+const transformEvent = event => {
+    return {
+        ...event._doc,
+        _id: event.id,
+        date: new Date(event._doc.date).toISOString(),
+        creator: user.bind(this,event.creator)
+    };
+};
+
 const eventHandler = eventIds =>{
     return Event.find({_id: {$in:eventIds}})
         .then(events=>{
             return events.map(singleEvent =>{
-                return {
-                    ...singleEvent._doc,
-                    _id: singleEvent.id,
-                    date:new Date(singleEvent._doc.date).toISOString(),
-                    creator:user.bind(this, singleEvent.creator)
-                }
-            })
+                return transformEvent(singleEvent);
+            });
         })
         .catch(err=>{
             console.log(err.message);
@@ -26,11 +30,7 @@ const singleEventHandler = async (eventId)=>{
     try{
         const fetchedEvent = await Event.findById(eventId);
         console.log(fetchedEvent);
-        return{
-            ...fetchedEvent._doc,
-            _id: fetchedEvent.id,
-            creator: user.bind(this, fetchedEvent._doc.creator)
-        }
+        return transformEvent(fetchedEvent);
     }catch (e) {
         console.log('Error Fetching single Event',e.message);
         throw e;
@@ -58,12 +58,7 @@ module.exports = {
         return Event.find().populate('creator')
             .then(events=>{
                 return events.map(event=>{
-                    return {
-                        ...event._doc,
-                        _id:event.id,
-                        date:new Date(event._doc.date).toISOString(),
-                        creator:user.bind(this,event._doc.creator)
-                    }
+                    return transformEvent(event);
                 })
             })
             .catch(err=>{
