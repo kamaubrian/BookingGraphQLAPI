@@ -1,2 +1,5 @@
-# GraphqlApi
+# GraphQLApi
 A GraphQL API written in Node Js. 😍😍😍😍😍
+##
+* 
+* 

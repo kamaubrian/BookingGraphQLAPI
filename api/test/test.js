@@ -5,6 +5,7 @@ const chai = require('chai');
 const expect = require('expect');
 
 describe('/Testing Query',()=>{
+
     it('it should test event query requests',(done)=>{
        setTimeout(done,1000);
        request(server)
@@ -23,6 +24,7 @@ describe('/Testing Query',()=>{
                done();
            })
     });
+
     it('it should fail on Bad Requests',(done)=>{
         setTimeout(done,1000);
         request(server)
@@ -37,6 +39,7 @@ describe('/Testing Query',()=>{
                 //console.log(res.body);
             });
     });
+
     it('it should not create duplicate users',(done)=>{
        setTimeout(done,1000);
        request(server)
@@ -54,5 +57,18 @@ describe('/Testing Query',()=>{
            })
     });
 
-
+    it('it should fetch all bookings',(done)=>{
+       setTimeout(done,1000);
+       request(server)
+           .post('/graphql')
+           .send({query:'{bookings{user{email}} }'})
+           .expect(200)
+           .end((err,res)=>{
+               if(err){
+                   return done(err);
+               }
+               done();
+               console.log(res.body)
+           });
+    });
 });
