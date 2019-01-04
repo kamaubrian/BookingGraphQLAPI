@@ -1,6 +1,6 @@
 const Booking = require('../../../api/model/booking');
 const {dateToString} = require('../helpers/date');
-const {user,singleEventHandler} = require('./merge');
+const {user, singleEventHandler} = require('./merge');
 const Event = require('../../../api/model/event');
 
 const transformBooking = async booking => {
@@ -18,47 +18,47 @@ const transformEvent = event => {
         ...event._doc,
         _id: event.id,
         date: dateToString(event._doc.date),
-        creator: user.bind(this,event.creator)
+        creator: user.bind(this, event.creator)
     };
 };
 module.exports = {
-    bookings: async ()=>{
-        try{
+    bookings: async () => {
+        try {
             const bookings = await Booking.find();
             console.log(bookings);
-            return bookings.map( async booking => {
+            return bookings.map(async booking => {
                 return await transformBooking(booking);
             })
-        }catch (e) {
+        } catch (e) {
             console.log(e.message);
             throw e;
         }
     },
 
-    bookEvent: async(args)=>{
-        try{
+    bookEvent: async (args) => {
+        try {
             const fetchedEvent = await Event.findOne({_id: args.eventId});
             const singleBooking = new Booking({
-                user:'5c20be57305ea72cf841b022',
-                event:fetchedEvent
+                user: '5c20be57305ea72cf841b022',
+                event: fetchedEvent
             });
             const result = await singleBooking.save();
             return transformBooking(result);
-        }catch (e) {
+        } catch (e) {
             console.log(e.message);
             throw e;
         }
     },
-    cancelBooking: async(args)=>{
-        try{
+    cancelBooking: async (args) => {
+        try {
             const bookedEvent = await Booking.findById(args.bookingId).populate('event');
-            if(bookedEvent == null ){
+            if (bookedEvent == null) {
                 throw new Error("Booking Does not Exist");
             }
-            const event =transformEvent(bookedEvent.event);
-            await Booking.deleteOne({_id:args.bookingId});
+            const event = transformEvent(bookedEvent.event);
+            await Booking.deleteOne({_id: args.bookingId});
             return event;
-        }catch (e) {
+        } catch (e) {
             console.log(e.message);
             throw e;
         }

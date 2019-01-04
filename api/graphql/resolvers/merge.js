@@ -1,41 +1,41 @@
 const User = require('../../model/user');
-const Event  = require('../../model/event');
+const Event = require('../../model/event');
 
-const eventHandler = eventIds =>{
-    return Event.find({_id: {$in:eventIds}})
-        .then(events=>{
-            return events.map(singleEvent =>{
+const eventHandler = eventIds => {
+    return Event.find({_id: {$in: eventIds}})
+        .then(events => {
+            return events.map(singleEvent => {
                 return transformEvent(singleEvent);
             });
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err.message);
             throw err;
         });
 };
 
-const singleEventHandler = async (eventId)=>{
-    try{
+const singleEventHandler = async (eventId) => {
+    try {
         const fetchedEvent = await Event.findById(eventId);
         console.log(fetchedEvent);
         return transformEvent(fetchedEvent);
-    }catch (e) {
-        console.log('Error Fetching single Event',e.message);
+    } catch (e) {
+        console.log('Error Fetching single Event', e.message);
         throw e;
     }
 };
 
 
-const user = userId =>{
+const user = userId => {
     return User.findById(userId)
-        .then(user=>{
+        .then(user => {
             return {
                 ...user._doc,
-                _id:user.id,
-                createdEvents: eventHandler.bind(this,user._doc.createdEvents)
+                _id: user.id,
+                createdEvents: eventHandler.bind(this, user._doc.createdEvents)
             }
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err.message);
             throw err;
         })

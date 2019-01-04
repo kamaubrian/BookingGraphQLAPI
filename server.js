@@ -5,12 +5,12 @@ const app = require('./app');
 
 const server = http.createServer(app);
 
-async function createServer(){
-    try{
+async function createServer() {
+    try {
         await server.listen(port);
-        console.log('Server Running on Port ',port);
-    }catch (e) {
-        console.log('Error Creating Server',e.message);
+        console.log('Server Running on Port ', port);
+    } catch (e) {
+        console.log('Error Creating Server', e.message);
     }
 };
 
