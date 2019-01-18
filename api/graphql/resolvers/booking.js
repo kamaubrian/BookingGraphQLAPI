@@ -35,8 +35,11 @@ module.exports = {
         }
     },
 
-    bookEvent: async (args) => {
+    bookEvent: async (args,req) => {
         try {
+            if (!req.isAuth) {
+                return new Error('Unauthorized Action')
+            }
             const fetchedEvent = await Event.findOne({_id: args.eventId});
             const singleBooking = new Booking({
                 user: '5c20be57305ea72cf841b022',
@@ -49,8 +52,11 @@ module.exports = {
             throw e;
         }
     },
-    cancelBooking: async (args) => {
+    cancelBooking: async (args,req) => {
         try {
+            if (!req.isAuth) {
+                return new Error('Unauthorized Action')
+            }
             const bookedEvent = await Booking.findById(args.bookingId).populate('event');
             if (bookedEvent == null) {
                 throw new Error("Booking Does not Exist");

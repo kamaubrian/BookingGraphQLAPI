@@ -10,7 +10,7 @@ const events = [];
 const mongoose = require('mongoose');
 const graphqlResolvers = require('./api/graphql/resolvers/index');
 const graphqlSchemas = require('./api/graphql/schemas/index');
-
+const isAuth = require('./api/graphql/midlleware/is-auth');
 
 mongoose.connect("mongodb+srv://" + process.env.MONGO_ATLAS_USER + ":" + process.env.MONGO_ATLAS + "@restapi-kvyex.mongodb.net/" + process.env.MONGO_ATLAS_DATABASE + "?retryWrites=true",
     {useNewUrlParser: true}, function (err) {
@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(cors());
+app.use(isAuth);
 app.use('/', routes);
 
 

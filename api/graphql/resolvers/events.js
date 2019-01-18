@@ -27,7 +27,10 @@ module.exports = {
                 throw err;
             });
     },
-    createEvent: (args) => {
+    createEvent: (args,req) => {
+        if (!req.isAuth) {
+            return new Error('Unauthorized Action')
+        }
         const event = new Event({
             _id: new mongoose.Types.ObjectId(),
             title: args.eventInput.title,

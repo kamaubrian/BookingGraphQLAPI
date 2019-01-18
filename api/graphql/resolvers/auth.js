@@ -1,5 +1,6 @@
 const User = require('../../../api/model/user');
 const bcyrpt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     createUser: (args) => {
@@ -41,12 +42,20 @@ module.exports = {
     },
     login: async ({email, password}) => {
         const user = await User.findOne({email: email});
+
         if (!user) {
             throw new Error('User Does not Exists')
         }
-        const isPasswordSimilar = await bcyrpt.compare(password,user.password);
-        if(!isPasswordSimilar){
+        const isPasswordSimilar = await bcyrpt.compare(password, user.password);
+        if (!isPasswordSimilar) {
             throw new Error('Password Is Incorrect');
+        }
+        const token = await jwt.sign({userId: user.id, email: user.email}, process.env.JWT_KEY,
+            {expiresIn: '1h'});
+        return {
+            userId: user.id,
+            token: token,
+            tokenExpiration: 1
         }
     }
 
