@@ -35,7 +35,7 @@ module.exports = {
         }
     },
 
-    bookEvent: async (args,req) => {
+    bookEvent: async (args, req) => {
         try {
             if (!req.isAuth) {
                 return new Error('Unauthorized Action')
@@ -52,7 +52,7 @@ module.exports = {
             throw e;
         }
     },
-    cancelBooking: async (args,req) => {
+    cancelBooking: async (args, req) => {
         try {
             if (!req.isAuth) {
                 return new Error('Unauthorized Action')
