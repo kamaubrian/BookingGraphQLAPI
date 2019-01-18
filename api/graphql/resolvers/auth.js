@@ -43,7 +43,10 @@ module.exports = {
         const user = await User.findOne({email: email});
         if (!user) {
             throw new Error('User Does not Exists')
-
+        }
+        const isPasswordSimilar = await bcyrpt.compare(password,user.password);
+        if(!isPasswordSimilar){
+            throw new Error('Password Is Incorrect');
         }
     }
 
