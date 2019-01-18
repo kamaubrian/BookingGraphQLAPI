@@ -37,13 +37,13 @@ module.exports = {
             description: args.eventInput.description,
             price: +args.eventInput.price,
             date: dateToString(args.eventInput.date),
-            creator: '5c20be57305ea72cf841b022'
+            creator: req.userId
         });
         let createdEvent;
         return event.save()
             .then(result => {
                 createdEvent = transformEvent(result);
-                return User.findById('5c20be57305ea72cf841b022')
+                return User.findById(req.userId)
                     .then(user => {
                         if (!user) {
                             throw new Error('User Not Found')
